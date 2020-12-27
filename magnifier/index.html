@@ -21,8 +21,8 @@
       position: relative;
       height: 200px;
       width: 360px;
-      background-image: url('./assets/1.png');
-      background-size: cover;
+      background-image: url('./assets/2.jpeg');
+      background-size: 100% 100%; 
       overflow: hidden;
     }
 
@@ -63,20 +63,45 @@
       <div class="float-box"></div>
     </div>
     <div class="big-box">
-      <img class="big-box-bg" src="./assets/1.png" alt="">
+      <img class="big-box-bg" src="./assets/2.jpeg" alt="">
     </div>
   </div>
 </body>
 <script>
+  const getEleSize = (Node) => {
+    if (Node.nodeType !== 1) return;
+    const display = Node.style.display
+    const visibility = Node.style.visibility
+    Node.style.visibility = 'hidden'
+    Node.style.display = 'block'
+    const width = Node.offsetWidth
+    const height = Node.offsetHeight
+    Node.style.display = display
+    Node.style.visibility = visibility
+    return {
+      width,
+      height
+    }
+  }
   const wrapper = document.getElementsByClassName('box-wrapper')[0]
   const smallBox = document.getElementsByClassName('small-box')[0]
   const floatBox = document.getElementsByClassName('float-box')[0]
   const bigBox = document.getElementsByClassName('big-box')[0]
   const bigBoxBg = document.getElementsByClassName('big-box-bg')[0]
 
+  const {
+    width: floatWidth,
+    height: floatHeight
+  } = getEleSize(floatBox)
 
-  const bigBgWidth = smallBox.offsetWidth * 360 / 60
-  const bigBgHeight = smallBox.offsetHeight * 200 / 60
+  const {
+    width: bigFloatWidth,
+    height: bigFloatHeight
+  } = getEleSize(bigBox)
+
+
+  const bigBgWidth = smallBox.offsetWidth * bigFloatWidth / floatWidth
+  const bigBgHeight = smallBox.offsetHeight * bigFloatHeight / floatHeight
 
   bigBoxBg.style.width = bigBgWidth + 'px'
   bigBoxBg.style.height = bigBgHeight + 'px'
@@ -95,24 +120,28 @@
   })
   smallBox.addEventListener('mousemove', (event) => {
     event.stopPropagation()
+
+    // 放大镜大小
+    const floatWidth = floatBox.offsetWidth
+    const floatHeight = floatBox.offsetHeight
     const {
       left: leftOffset,
       top: topOffset
     } = wrapper.getBoundingClientRect()
-    // left top 是small-box偏移
-    let left = event.clientX - leftOffset - 30
-    let top = event.clientY - topOffset - 30
+    // left top 是small-box中放大镜
+    let left = event.clientX - leftOffset - floatWidth / 2
+    let top = event.clientY - topOffset - floatHeight / 2
 
     if (left < 0) {
       left = 0
-    } else if (left > (smallBox.offsetWidth - 60)) {
-      left = smallBox.offsetWidth - 60
+    } else if (left > (smallBox.offsetWidth - floatWidth)) {
+      left = smallBox.offsetWidth - floatWidth
     }
 
     if (top < 0) {
       top = 0
-    } else if (top > (smallBox.offsetHeight - 60)) {
-      top = smallBox.offsetHeight - 60
+    } else if (top > (smallBox.offsetHeight - floatHeight)) {
+      top = smallBox.offsetHeight - floatHeight
     }
 
     floatBox.style.left = left + 'px'
@@ -124,9 +153,6 @@
 
     bigBoxBg.style.left = '-' + bigBoxBgLeft + 'px'
     bigBoxBg.style.top = '-' + bigBoxBgTop + 'px'
-
-
-
 
   })
 </script>
