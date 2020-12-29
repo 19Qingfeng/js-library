@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab</title>
+  <!-- <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+  <link rel="stylesheet" href="index.css">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    ul li {
+      list-style: none;
+    }
+
+    body {
+      background-color: #323232;
+      font-size: 12px;
+      font-family: '微软雅黑';
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="tab" class="tab" data-config='
+    {
+      "trigger":"hover",
+      "effect": "fade",
+      "invoke": "2",
+      "auto": "false"
+    }
+  '>
+    <ul class="tab-nav" id="tab-wrapper">
+      <li class="actived"><a href="javascript:void(0)">新闻</a></li>
+      <li><a href="javascript:void(0)">娱乐</a></li>
+      <li><a href="javascript:void(0)">电影</a></li>
+      <li><a href="javascript:void(0)">科技</a></li>
+    </ul>
+    <div class="content-warp" id="content-warp">
+      <div class="content-item current">
+        <img src="./assets/1.jpeg">
+      </div>
+      <div class="content-item">
+        <img src="./assets/2.jpeg" alt="">
+      </div>
+      <div class="content-item">
+        <img src="./assets/3.jpeg" alt="">
+      </div>
+      <div class="content-item">
+        <img src="./assets/4.jpeg" alt="">
+      </div>
+    </div>
+
+  </div>
+
+</body>
+<script src="./tab.js"></script>
+<script src="./index.js">
+  /* tab核心其实就是切换actived和current这两个class */
+</script>
+
+</html>
