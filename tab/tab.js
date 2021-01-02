@@ -14,6 +14,34 @@ const getDomList = (ulId, contentId) => {
   };
 };
 
+const fadeIn = (el) => {
+  el.style.display = "block";
+  el.style.opacity = 0;
+  const timer = setInterval(() => {
+    if (el.style.opacity < 1) {
+      el.style.opacity = Number(el.style.opacity) + 0.1;
+    } else {
+      clearInterval(timer);
+      el.style.display = "block";
+    }
+  }, 100);
+  return el;
+};
+
+const fadeOut = (el) => {
+  el.style.display = "block";
+  el.style.opacity = 1;
+  const timer = setInterval(() => {
+    if (el.style.opacity > 0) {
+      el.style.opacity = el.style.opacity - 0.1;
+    } else {
+      clearInterval(timer);
+      el.style.display = "none";
+    }
+  }, 100);
+  return el;
+};
+
 /**
  * @class Tab
  * @param trigger 'click' | 'mouseover' 触发方式
@@ -57,12 +85,26 @@ class Tab {
   }
 
   updateContent(index) {
-    this.contentList.forEach((el, idx) => {
-      el.classList.remove("current");
-      if (idx === index) {
-        el.classList.add("current");
-      }
-    });
+    const preIndex = this.contentList.findIndex(i => Array.from(i.classList).includes('current'))
+    if(preIndex === index) return;
+    const { effect } = this.config;
+    if (effect === "default") {
+      this.contentList.forEach((el, idx) => {
+        el.classList.remove("current");
+        if (idx === index) {
+          el.classList.add("current");
+        }
+      });
+    } else {
+      const showContent = this.contentList[index];
+      const hideContent = this.contentList.find((i) => {
+        return Array.from(i.classList).includes("current");
+      });
+      fadeOut(hideContent);
+      hideContent.classList.remove("current");
+      fadeIn(showContent);
+      showContent.classList.add("current");
+    }
   }
 
   // 绑定事件
@@ -71,7 +113,6 @@ class Tab {
     if (trigger !== "click" && trigger !== "mouseover") {
       throw new Error(`event Configuration must be click' of 'hover'`);
     }
-    console.log(this.liList, "liList");
     this.liList.forEach((li) => {
       li.addEventListener(trigger, () => {
         this.triggertLiInvoke(li);
